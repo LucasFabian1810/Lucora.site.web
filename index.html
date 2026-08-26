@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título de la pestaña del navegador. Se sobreescribe también
+       desde script.js con el nombre real del negocio (SITE.business.name),
+       así que este texto es solo el valor por defecto mientras carga. -->
+  <title> Detailing a domicilio</title>
+
+  <!-- Fuentes de Google Fonts:
+       - Space Grotesk: para títulos (look técnico/moderno)
+       - Inter: para texto normal (fácil de leer)
+       - IBM Plex Mono: para precios y datos tipo "ficha técnica" -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <!-- Aquí se conecta el archivo de estilos separado -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER / BARRA DE NAVEGACIÓN
+     ============================================================ -->
+<header>
+  <nav class="wrap">
+    <!-- Logo -->
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="Lucora.png" alt="Logo Lucora Detailing" style="height: 70px; width: auto;">
+      <span style="font-size: 22px; font-weight: 700;">Lucora Detailing</span>
+    </div>
+
+    <button class="menu-toggle" type="button" aria-label="Abrir menú de vehículos" aria-controls="vehicle-menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Navegación y botón Reservar -->
+    <div class="nav-right-group">
+      <div class="nav-categories" id="vehicle-menu" style="display: flex; gap: 16px;">
+        <a href="#precios" class="nav-box nav-vehicle" data-target-tab="sedán">SEDÁN</a>
+        <a href="#precios" class="nav-box nav-vehicle" data-target-tab="suv">SUV</a>
+        <a href="#precios" class="nav-box nav-vehicle" data-target-tab="camioneta">CAMIONETA</a>
+      </div>
+
+      <a href="https://wa.me/18162379423?text=Hola,%20quisiera%20mas%20informacion%20para%20reservar" 
+         class="btn btn-primary" 
+         id="nav-cta" 
+         target="_blank" 
+         rel="noopener noreferrer">Reservar</a>
+    </div>
+  </nav>
+</header>
+
+  <!-- ============================================================
+       HERO — Primera sección que ve el cliente al entrar.
+       Debe comunicar en 3 segundos: qué es, para quién, y qué hacer.
+       El titular tiene el efecto "shine" (barrido de brillo) definido
+       en style.css, como guiño visual al negocio de detailing.
+       ============================================================ -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <!-- "Eyebrow": texto pequeño encima del título, da contexto rápido -->
+        <p class="eyebrow" id="hero-eyebrow">MOVIL DETAILING - KANSAS CITY</p>
+
+        <!-- Título principal. El span con clase "shine-text" es el que
+             tiene la animación de brillo definida en style.css -->
+        <h1 style="margin-top:14px;">
+          <span class="shine-text" id="hero-headline">Le devolvemos el brillo a tu auto, sin que muevas un dedo.</span>
+        </h1>
+
+        <!-- Subtítulo de apoyo, explica la propuesta de valor -->
+        <p class="lead" id="hero-sub">Vamos hasta ti con equipo profesional. Cotiza en minutos por chat y agenda tu horario sin salir de casa.</p>
+
+        <!-- Botones de acción principal (CTA = "Call To Action") -->
+        <div class="hero-ctas">
+          <a href="https://wa.me/18162379423?text=Hola,%20quisiera%20mas%20informacion%20para%20reservar" class="btn btn-primary">Cotizar por chat →</a>
+          <a href="#precios" class="btn btn-ghost">Ver precios</a>
+        </div>
+
+        <!-- Fila de "confianza rápida" — mini garantías sin necesidad
+             de reseñas todavía (ideal para negocios nuevos) -->
+        <div class="trust-row">
+          <div class="trust-item"><span class="dot"></span> 100% a domicilio</div>
+          <div class="trust-item"><span class="dot"></span> Cotización con fotos</div>
+          <div class="trust-item"><span class="dot"></span> Respuesta rápida por chat</div>
+        </div>
+      </div>
+
+      <!-- Espacio para imagen/foto real del negocio.
+           Por ahora es un placeholder animado (ver .hero-visual en el CSS).
+           Reemplazar con una <img> real cuando tengas fotos del negocio. -->
+      <div class="hero-visual">
+       <video autoplay loop muted playsinline style="width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: inherit;">
+  <source src="car.mp4" type="video/mp4">
+</video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRECIOS — Sección con tabs (pestañas) por tipo de vehículo.
+       El contenido de esta sección se genera 100% desde script.js,
+       leyendo el array SITE.vehicles. Aquí en el HTML solo hay
+       contenedores vacíos (id="vehicle-tabs", id="price-grid", etc.)
+       que JavaScript va a rellenar dinámicamente.
+       ============================================================ -->
+  <section id="precios" class="section-precios">
+  <div class="wrap">
+    <div class="prices-container">
+      <!-- Columna Izquierda: Información y Pestañas -->
+      <div class="prices-info">
+        <p class="eyebrow">PRECIOS</p>
+        <h2>Un precio claro para cada vehículo.</h2>
+        <p class="muted" style="margin-top:10px;">El precio final se confirma con fotos actuales de tu vehículo.</p>
+        
+        <!-- Pestañas (se generan dinámicamente con JS) -->
+        <div class="tabs" id="vehicle-tabs"></div>
+      </div>
+
+      <!-- Columna Derecha: Tarjetas de Precios y Adicional -->
+      <div class="prices-right-col">
+        <!-- Las 4 tarjetas de precios -->
+        <div class="price-grid" id="price-grid"></div>
+
+        <!-- Servicio adicional (Lavado de motor) -->
+        <div class="addon-row" id="addon-row"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- ============================================================
+       CÓMO FUNCIONA — 3 pasos numerados del proceso de compra.
+       Aquí SÍ tiene sentido usar numeración (01, 02, 03) porque
+       es una secuencia real: primero uno, luego el otro.
+       Contenido generado desde SITE.steps en script.js.
+       ============================================================ -->
+  <section class="how-it-works-section" id="como-funciona">
+  <div class="how-it-works-container">
+    <div class="how-it-works-header">
+      <span class="eyebrow">CÓMO FUNCIONA</span>
+      <h2>Tres pasos, sin llamadas ni esperas.</h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-number">01</span>
+        <h3>Escríbenos por chat</h3>
+        <p>Cuéntanos tu tipo de vehículo y el servicio que buscas.</p>
+      </div>
+
+      <div class="step-card">
+        <span class="step-number">02</span>
+        <h3>Envía 2-3 fotos</h3>
+        <p>Confirmamos el precio final según el estado actual de tu auto.</p>
+      </div>
+
+      <div class="step-card">
+        <span class="step-number">03</span>
+        <h3>Te lo dejamos brillante</h3>
+        <p>Vamos a tu dirección en el horario que elijas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- ============================================================
+      GALERÍA — Resultados de trabajos realizados.
+      Las tres tarjetas se generan desde SITE.gallery en script.js.
+      ============================================================ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">RESULTADOS</p>
+        <h2>Nuestros Trabajos. </h2>
+      </div>
+      <div class="gallery-grid" id="gallery-grid" role="list" aria-label="Galería de resultados"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TESTIMONIOS — Reseñas de clientes, generan confianza (prueba social).
+       Contenido generado desde SITE.testimonials en script.js.
+       ============================================================ -->
+  <section style="background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">CLIENTES</p>
+        <h2>Lo que dicen quienes ya probaron.</h2>
+      </div>
+      <div class="testi-grid" id="testi-grid"></div>
+    </div>
+  </section>
+
+<!-- ============================================================
+     REDES SOCIALES
+     ============================================================ -->
+<section class="social-section" aria-labelledby="social-title">
+  <div class="wrap">
+    <div class="cta-band">
+      <p class="eyebrow">REDES SOCIALES</p>
+      <h2 id="social-title">Síguenos en nuestras redes sociales.</h2>
+      <p>Mira el antes y después de nuestros servicios, videos de transformaciones y contenido diario.</p>
+      
+      <div class="social-links" aria-label="Redes sociales de Lucora Detailing">
+        
+        <!-- FACEBOOK -->
+        <a class="social-link" data-social="facebook" href="https://www.facebook.com/share/1HQNmoRLGV/" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H16V3.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.5 1.3-3.5 3.6V10H8v3h2.4v8h3.1Z"/></svg>
+          <span>Facebook</span>
+        </a>
+
+        <!-- INSTAGRAM (Remplaza el # cuando tengas el enlace directo) -->
+        <a class="social-link" data-social="instagram" href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle class="social-icon-dot" cx="17.5" cy="6.5" r="1"/></svg>
+          <span>Instagram</span>
+        </a>
+
+        <!-- TIKTOK -->
+        <a class="social-link" data-social="tiktok" href="https://www.tiktok.com/@lucora_car_detailing" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3v11.1a4.4 4.4 0 1 1-3.2-4.2v2.6a1.8 1.8 0 1 0 .6 1.3V3h2.6c.4 2 1.6 3.3 3.5 3.7v2.6A7.1 7.1 0 0 1 15 8.1V3Z"/></svg>
+          <span>TikTok</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- ============================================================
+       FOOTER — Información de contacto y zona de cobertura.
+       ============================================================ -->
+  <footer>
+    <div class="wrap footer-row">
+      <div class="muted" id="footer-coverage">Cobertura: {{coverage_area}} · Kansas City</div>
+      <div class="muted" id="footer-contact">{{phone}} · {{business_name}}</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       BOTÓN FLOTANTE DE CHAT — Siempre visible en pantalla,
+       fijo en la esquina inferior derecha (ver .float-cta en CSS).
+       Es el CTA de mayor prioridad: siempre a un clic de distancia.
+       ============================================================ -->
+  <div class="float-cta">
+    <a href="https://wa.me/18162379423?text=Hola,%20quisiera%20mas%20informacion%20para%20reservar" class="btn btn-primary">💬 Chatear</a>
+  </div>
+
+  <!-- Aquí se conecta el archivo de JavaScript separado.
+       Va al final del <body> para que el HTML cargue primero
+       y la página no se sienta "en blanco" mientras carga el script. -->
+  <script src="script.js"></script>
+
+</body>
+</html>

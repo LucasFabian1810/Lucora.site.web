@@ -1,0 +1,718 @@
+/* ============================================================
+   PLANTILLA — Detailing Móvil — ESTILOS (style.css)
+   Todo el CONTENIDO (textos, precios, fotos) se controla desde
+   script.js (objeto SITE). Este archivo solo controla el DISEÑO
+   visual: colores, tipografías, espaciados, animaciones.
+   No hace falta tocar este archivo para reutilizar la plantilla
+   con otro negocio — solo cambia script.js.
+   ============================================================ */
+
+/* ---------- VARIABLES DE DISEÑO (design tokens) ----------
+   Definir los colores aquí, en un solo lugar, permite cambiar
+   toda la paleta del sitio editando solo estas líneas. */
+:root{
+  --bg: #14171b;              /* fondo general de la página (grafito oscuro) */
+  --surface: #1b2027;         /* fondo de tarjetas y bloques (un poco más claro que el fondo) */
+  --surface-2: #232a33;       /* fondo de tarjetas cuando necesitan destacar más */
+  --border: rgba(255,255,255,0.08); /* bordes sutiles, casi invisibles */
+  --text: #f2f4f6;            /* color de texto principal (casi blanco) */
+  --text-muted: #8b93a1;      /* color de texto secundario/menos importante */
+  --shine: #6fd1ff;           /* azul "brillo" — color de acento principal, tema de detailing */
+  --shine-soft: rgba(111,209,255,0.14); /* versión transparente del azul, para fondos suaves */
+  --warm: #e8a33d;            /* dorado cálido — color de los botones de acción (CTA) */
+  --warm-soft: rgba(232,163,61,0.16);   /* versión transparente del dorado */
+  --radius: 14px;             /* redondeo estándar de tarjetas y botones */
+  --maxw: 1200px;           /* ancho máximo del contenido, para que no se estire en pantallas grandes */
+}
+
+/* ---------- RESET BÁSICO ----------
+   Quita los márgenes/paddings por defecto que pone el navegador,
+   para tener control total del espaciado nosotros mismos. */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; } /* scroll suave al hacer clic en links internos como #precios */
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter', sans-serif;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased; /* texto más nítido en pantallas Mac/iOS */
+}
+
+/* Tipografía de títulos vs. texto normal vs. datos numéricos */
+h1,h2,h3,.display{ font-family:'Space Grotesk', sans-serif; font-weight:700; letter-spacing:-0.01em; }
+.mono{ font-family:'IBM Plex Mono', monospace; } /* usada en precios, para efecto "ficha técnica" */
+
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+
+/* Contenedor central: limita el ancho del contenido y lo centra */
+.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 32px; }
+
+.muted{ color:var(--text-muted); }
+
+/* "Eyebrow" = la etiqueta pequeña en mayúsculas encima de cada título de sección */
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--shine);
+}
+
+/* Espaciado vertical estándar entre secciones */
+section{ padding:88px 0; }
+@media (max-width:640px){ section{ padding:56px 0; } } /* menos espacio en móvil */
+
+/* ---------- BOTONES ---------- */
+button, .btn{
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:700;
+  font-size:15px;
+  border:none;
+  border-radius:999px; /* botón tipo "píldora" */
+  padding:14px 48px; /* <--- Cambia 28px por 48px (o 50px/60px para hacerlo aún más largo) */
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+/* Anillo de foco visible al navegar con teclado (accesibilidad) */
+button:focus-visible, a:focus-visible{ outline:2px solid var(--shine); outline-offset:3px; }
+
+/* Botón principal (dorado) — usado para todos los CTAs de "reservar/chatear" */
+.btn-primary{
+  background:var(--warm);
+  color:#1a1305;
+  box-shadow:0 0 0 0 rgba(232,163,61,0.5);
+}
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(232,163,61,0.28); }
+
+/* Botón secundario (transparente con borde) — para acciones menos prioritarias, como "Ver precios" */
+.btn-ghost{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{ border-color:var(--shine); color:var(--shine); }
+
+/* ---------- HEADER / NAV ---------- */
+header {
+  position: sticky; 
+  top: 0; 
+  z-index: 50; 
+  background: rgba(20, 23, 27, 0.85);
+  backdrop-filter: blur(10px); 
+  border-bottom: 1px solid var(--border);
+}
+
+/* Alineación de la barra superior */
+header nav.wrap {
+  display: flex;
+  justify-content: space-between; /* Logo a la izquierda, resto a la derecha */
+  align-items: center;
+}
+
+/* Contenedor que agrupa las secciones y el botón a la derecha */
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 24px; /* Espacio entre el menú y el botón de Reservar */
+}
+.menu-toggle{ display:none; }
+nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+.logo{ font-family:'Space Grotesk'; font-weight:700; font-size:18px; }
+.logo span{ color:var(--shine); }
+nav .btn{ padding:10px 20px; font-size:13px; } /* botón del nav más pequeño que los demás */
+
+/* ---------- SECCIÓN HERO (PORTADA) ---------- */
+.hero {
+  position: relative;
+  padding: 96px 0 80px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 0%, var(--shine-soft), transparent 60%),
+    var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.hero .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.hero-content {
+  max-width: 550px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 16px 0;
+}
+
+/* ---------- HEADER Y HERO EN MÓVIL ---------- */
+@media (max-width:768px){
+  header nav.wrap{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) auto;
+    align-items:center;
+    gap:10px 12px;
+    padding:10px 16px;
+  }
+
+  .menu-toggle{
+    display:inline-flex;
+    grid-column:2;
+    grid-row:1;
+    justify-self:end;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
+    width:42px;
+    height:42px;
+    padding:0;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--surface-2);
+    color:var(--text);
+  }
+
+  .menu-toggle span{
+    display:block;
+    width:18px;
+    height:2px;
+    border-radius:1px;
+    background:currentColor;
+    transition:transform .18s ease, opacity .18s ease;
+  }
+
+  .menu-toggle[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+  .menu-toggle[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  .logo{
+    grid-column:1;
+    grid-row:1;
+    justify-content:flex-start;
+    min-width:0;
+  }
+
+  .logo img{ height:40px !important; }
+  .logo span{ font-size:16px !important; white-space:nowrap; }
+
+  .nav-right-group{
+    grid-column:1 / -1;
+    grid-row:2;
+    position:relative;
+    display:block;
+    align-items:stretch;
+    width:100%;
+  }
+
+  .nav-categories{
+    display:none !important;
+    position:absolute;
+    z-index:60;
+    top:calc(100% + 8px);
+    right:0;
+    left:0;
+    grid-template-columns:1fr;
+    gap:4px !important;
+    width:100%;
+    padding:8px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--surface-2);
+    box-shadow:0 14px 30px rgba(0,0,0,.28);
+  }
+
+  .nav-categories.is-open{ display:grid !important; }
+  .nav-categories .nav-box{
+    padding:10px 12px;
+    border-radius:8px;
+    font-size:12px;
+    white-space:nowrap;
+    color:var(--text);
+  }
+
+  .nav-categories .nav-box:hover{
+    background:var(--shine-soft);
+    color:var(--shine);
+  }
+
+  #nav-cta{
+    justify-content:center;
+    width:100%;
+    padding:12px 20px;
+  }
+
+  .hero{
+    padding:56px 0;
+  }
+
+  .hero .wrap{
+    flex-direction:column;
+    align-items:stretch;
+    gap:32px;
+    padding:0 20px;
+  }
+
+  .hero h1{
+    font-size:clamp(30px, 9vw, 38px);
+  }
+
+  .hero-ctas{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .hero-ctas .btn{
+    justify-content:center;
+    width:100%;
+    padding:13px 20px;
+  }
+
+}
+
+/* ---------- SECCIÓN PRECIOS ---------- */
+.section-precios {
+  padding: 80px 0;
+}
+
+#precios {
+  scroll-margin-top: 100px;
+}
+
+.prices-container {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.prices-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  border-color: var(--shine);
+  color: #ffffff;
+}
+
+.tab.active {
+  background: var(--shine-soft);
+  border-color: var(--shine);
+  color: var(--shine);
+  font-weight: 600;
+}
+
+.prices-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.price-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.price-card .service-title {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.price-card .price-amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Tarjeta Adicional Única (Lavado de motor) */
+.addon-row,
+#addon-row {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 14px 20px;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 12px;
+  background: rgba(234, 179, 8, 0.05);
+}
+
+/* Quita sub-bordes que puedan desarmar la tarjeta adicional */
+.addon-row > *,
+#addon-row > * {
+  margin: 0;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 900px) {
+  .prices-container {
+    grid-template-columns: 1fr;
+  }
+
+  .price-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .addon-row,
+  #addon-row {
+    width: 100%;
+  }
+}
+
+/* ---------- ELEMENTO DE FIRMA: "SHINE SWEEP" ----------
+   Este es el detalle visual distintivo de la plantilla: un barrido
+   diagonal de brillo que pasa por el titular al cargar la página,
+   simulando el efecto de pulir con una microfibra. Conecta
+   directamente con el negocio (detailing = dejar las cosas brillantes). */
+.shine-text{
+  position:relative;
+  background:linear-gradient(100deg,
+    var(--text) 18%, #d9f6ff 34%, var(--shine) 42%, #ffffff 50%, var(--shine) 58%, #d9f6ff 66%, var(--text) 82%);
+  background-size:280% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 0 10px rgba(111,209,255,.34), 0 0 24px rgba(111,209,255,.18);
+  animation:sweep 4.8s cubic-bezier(.45,0,.25,1) .25s infinite;
+}
+@keyframes sweep{
+  0%, 12%{ background-position:120% 0; }
+  62%, 100%{ background-position:-30% 0; }
+}
+/* Si el usuario tiene activado "reducir movimiento" en su sistema,
+   desactivamos la animación por accesibilidad y mostramos texto normal */
+@media (prefers-reduced-motion:reduce){
+  .shine-text{ animation:none; color:var(--text); background:none; background-clip:initial; -webkit-background-clip:initial; }
+}
+
+.hero p.lead{ font-size:18px; color:var(--text-muted); margin-top:18px; max-width:46ch; } /* 46ch = ancho legible de texto */
+.hero-ctas{ display:flex; gap:12px; margin-top:32px; flex-wrap:wrap; }
+.trust-row{ display:flex; gap:22px; margin-top:36px; flex-wrap:wrap; }
+.trust-item{ font-size:13px; color:var(--text-muted); display:flex; align-items:center; gap:8px; }
+.trust-item .dot{ width:6px; height:6px; border-radius:50%; background:var(--shine); } /* puntito decorativo */
+
+/* ---------- HERO VISUAL (Contenedor del video) ---------- */
+.hero-visual {
+  aspect-ratio: 9 / 16; /* Ajustado al formato vertical del video */
+  max-width: 380px; /* Ancho ideal para que no quede gigante en laptop */
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+}
+
+.hero-visual video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Llena todo el espacio sin dejar bordes negros */
+  display: block;
+}
+
+@media (max-width:768px){
+  .hero-visual{
+    display:block;
+    width:min(100%, 320px);
+    max-width:100%;
+    height:auto;
+    max-height:none;
+    aspect-ratio:9 / 16;
+    padding:0;
+    border:0;
+    border-radius:16px;
+    background:transparent;
+    overflow:hidden;
+    margin:0 auto;
+  }
+
+  .hero-visual video{
+    width:100% !important;
+    height:100% !important;
+    max-width:100%;
+    object-fit:cover !important;
+    border-radius:inherit !important;
+    background:transparent;
+    display:block;
+  }
+}
+
+/* ---------- ENCABEZADOS DE SECCIÓN ----------
+   Estilo compartido por el "eyebrow + título" que aparece
+   arriba de cada sección (Precios, Cómo funciona, Resultados, etc.) */
+.section-head{ max-width:640px; margin-bottom:48px; }
+.section-head h2{ font-size:clamp(26px,3.4vw,38px); margin-top:10px; }
+
+/* ---------- SECCIÓN CÓMO FUNCIONA ---------- */
+.how-it-works-section,
+#como-funciona {
+  background: var(--surface); /* Fondo del contenedor */
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 60px 20px;
+}
+
+/* Contenedor en 2 columnas (Texto a la izquierda, Tarjetas a la derecha) */
+.how-it-works-section .wrap,
+.how-it-works-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Columna izquierda más estrecha que las tarjetas */
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* Columna de Título */
+.how-it-works-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.how-it-works-header .eyebrow {
+  color: var(--shine);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.how-it-works-header h2 {
+  font-size: 32px;
+  margin-top: 8px;
+  color: #ffffff;
+}
+
+/* Tarjetas alineadas horizontalmente a la derecha */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Tarjeta individual con fondo ligeramente más oscuro */
+.step-card {
+  background: var(--bg); /* Fondo de la tarjeta */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  color: var(--shine);
+  font-weight: 600;
+}
+
+.step-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.step-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 900px) {
+  .how-it-works-section .wrap,
+  .how-it-works-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- GALERÍA (fotos antes/después) ---------- */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:16px;
+}
+.gallery-card{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--surface);
+}
+.gallery-media{
+  width:100%;
+  aspect-ratio:4 / 3;
+  overflow:hidden;
+  background:var(--surface-2);
+}
+.gallery-media img,
+.gallery-media video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.gallery-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--text-muted);
+}
+.gallery-card h3{
+  padding:14px 16px;
+  font-size:16px;
+  color:var(--text);
+}
+@media (max-width:768px){
+  .gallery-grid{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    padding:0 0 12px;
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:20px;
+    scrollbar-width:thin;
+  }
+  .gallery-card{
+    flex:0 0 min(82vw, 320px);
+    scroll-snap-align:start;
+  }
+}
+
+/* ---------- TESTIMONIOS ---------- */
+.testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+@media (max-width:800px){ .testi-grid{ grid-template-columns:1fr; } }
+.testi{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+.testi .stars{ color:var(--warm); font-size:14px; letter-spacing:2px; } /* estrellitas ★★★★★ */
+.testi p{ margin-top:12px; font-size:14px; color:var(--text); } /* la cita del cliente */
+.testi .who{ margin-top:14px; font-size:13px; color:var(--text-muted); } /* nombre y ciudad */
+
+/* ---------- REDES SOCIALES ---------- */
+.cta-band{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:56px 40px;
+  text-align:center;
+}
+.cta-band h2{ font-size:clamp(24px,3.2vw,34px); }
+.cta-band p{ color:var(--text-muted); margin-top:10px; }
+.social-links{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:12px;
+  max-width:680px;
+  margin:26px auto 0;
+}
+.social-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:52px;
+  padding:14px 18px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk', sans-serif;
+  font-weight:700;
+  transition:transform .15s ease, border-color .15s ease, color .15s ease, background .15s ease;
+}
+.social-link svg{
+  width:20px;
+  height:20px;
+  fill:currentColor;
+}
+.social-link[data-social="instagram"] svg{ fill:none; stroke:currentColor; stroke-width:1.8; }
+.social-link[data-social="instagram"] .social-icon-dot{ fill:currentColor; stroke:none; }
+.social-link:hover{
+  transform:translateY(-2px);
+  border-color:var(--shine);
+  background:var(--surface-2);
+  color:var(--shine);
+}
+@media (max-width:640px){
+  .cta-band{ padding:40px 24px; }
+  .social-links{ grid-template-columns:1fr; }
+  .social-link{ gap:8px; padding:14px 12px; font-size:14px; }
+}
+
+/* ---------- FOOTER ---------- */
+footer{ border-top:1px solid var(--border); padding:36px 0; }
+.footer-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+.footer-row .muted{ font-size:13px; }
+
+/* ---------- BOTÓN FLOTANTE DE CHAT ----------
+   Queda fijo en pantalla (no se mueve al hacer scroll),
+   siempre visible en la esquina inferior derecha. */
+.float-cta{
+  position:fixed; bottom:20px; right:20px; z-index:60;
+}
+@media (max-width:640px){
+  .float-cta{ right:16px; bottom:16px; }
+  .float-cta .btn{ padding:12px 18px; font-size:14px; } /* un poco más chico en móvil */
+}
